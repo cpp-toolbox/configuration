@@ -111,7 +111,7 @@ bool Configuration::set_value(const std::string &section, const std::string &key
     return true;
 }
 
-std::optional<std::string> Configuration::get_value(const std::string &section, const std::string &key) {
+std::optional<std::string> Configuration::get_value(const std::string &section, const std::string &key) const {
     auto section_it = section_to_key_to_value.find(section);
     if (section_it == section_to_key_to_value.end()) {
         return std::nullopt;

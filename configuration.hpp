@@ -11,11 +11,10 @@
 #include <vector>
 
 /**
- * @brief Class to parse a configuration file and apply logic based on
- * section-key pairs.
+ * @brief Allows you to store values as well as run logic based on section-key pairs
  *
- * the configuration is stored live in this class/object, and provides methods for loading and saving configuration from
- * or to file
+ * @details The configuration is stored live in this class/object, and provides methods for loading and saving
+ * configuration from or to file
  *
  */
 class Configuration {
@@ -47,7 +46,21 @@ class Configuration {
 
     bool set_value(const std::string &section, const std::string &key, const std::string &value,
                    const bool apply = false);
-    std::optional<std::string> get_value(const std::string &section, const std::string &key);
+    std::optional<std::string> get_value(const std::string &section, const std::string &key) const;
+
+    template <typename T> std::optional<T> get_numeric_value(const std::string &section, const std::string &key) const {
+        static_assert(std::is_arithmetic_v<T>);
+        auto value_opt = get_value(section, key);
+        if (!value_opt) {
+            return std::nullopt;
+        }
+        T value;
+        auto result = std::from_chars(value_opt->data(), value_opt->data() + value_opt->size(), value);
+        if (result.ec != std::errc{} || result.ptr != value_opt->data() + value_opt->size()) {
+            return std::nullopt;
+        }
+        return value;
+    }
 
     /**
      * @brief Checks whether a configuration value is explicitly set to "on".
