@@ -97,7 +97,6 @@ class Configuration {
     std::filesystem::path config_path;
     SectionKeyPairToConfigLogic section_key_to_config_logic;
     std::unordered_map<std::string, std::unordered_map<std::string, std::string>> section_to_key_to_value;
-    Logger console_logger{"configuration"};
 
     void parse_config_file();
     static std::string trim(const std::string &str);
